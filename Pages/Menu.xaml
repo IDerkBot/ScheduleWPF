@@ -1,0 +1,26 @@
+﻿<Page x:Class="ScheduleWPF.Pages.Menu"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d" 
+      d:DesignHeight="455" d:DesignWidth="300"
+      VerticalAlignment="Center" HorizontalAlignment="Center"
+      Title="Menu" Loaded="Menu_OnLoaded">
+
+	<StackPanel Width="300">
+		<Button Content="Профиль" Name="BtnProfile" Click="BtnProfileMove_Click"/>
+		<Button Content="Предметы" Name="BtnLessons" Click="BtnLessonsMove_Click"/>
+		<Button Content="Учителя" Name="BtnTeachers" Click="BtnTeachersMove_Click"/>
+		<Button Content="Журнал" Name="BtnJournal" Click="BtnJournalMove_Click"/>
+		<Button Content="Посещаемость" Name="BtnAttendance" Click="BtnAttendanceMove_Click"/>
+		<Button Content="Группы" Name="BtnGroups" Click="BtnGroupsMove_Click"/>
+		<Button Content="Экзамены" Name="BtnExams" Click="BtnExamsMove_Click"/>
+		<Button Content="Расписание" Name="BtnSchedule" Click="BtnScheduleMove_Click"/>
+		<Button Content="Студенты" Name="BtnStudents" Click="BtnStudentsMove_Click"/>
+		<Button Content="Кабинеты" Name="BtnClassrooms" Click="BtnClassroomsMove_Click"/>
+		<Button Content="Специальности" Name="BtnSpecializations" Click="BtnSpecializationsMove_Click"/>
+		<Button Content="Модули" Name="BtnModules" Click="BtnModulesMove_Click"/>
+		<Button Content="Праздники" Name="BtnHolidays" Click="BtnHolidaysMove_Click"/>
+	</StackPanel>
+</Page>
