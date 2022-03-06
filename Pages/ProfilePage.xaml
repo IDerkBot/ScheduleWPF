@@ -1,0 +1,67 @@
+﻿<Page x:Class="ScheduleWPF.Pages.ProfilePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:faw="http://schemas.fontawesome.com/icons/"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="300"
+      VerticalAlignment="Center" HorizontalAlignment="Center"
+      Title="ProfilePage">
+	<StackPanel Width="300">
+		<TextBlock Text="Профиль" Style="{StaticResource Title}"/>
+		<GroupBox Header="Личные данные">
+			<StackPanel>
+				<TextBlock Text="Фамилия *"/>
+				<TextBox Text="{Binding Surname}" Name="TbSurname" TextChanged="TbPersonalInfo_OnTextChanged"/>
+				<TextBlock Text="Имя *"/>
+				<TextBox Text="{Binding Firstname}" Name="TbFirstname" TextChanged="TbPersonalInfo_OnTextChanged"/>
+				<TextBlock Text="Отчество *"/>
+				<TextBox Text="{Binding Patronymic}" Name="TbPatronymic" TextChanged="TbPersonalInfo_OnTextChanged"/>
+				<TextBlock Text="Телефон"/>
+				<TextBox Text="{Binding Phone}"/>
+				<TextBlock Text="Почта"/>
+				<TextBox Text="{Binding Email}"/>
+			</StackPanel>
+		</GroupBox>
+		<GroupBox Header="Группа">
+			<Grid>
+				<ComboBox Name="CbGroup" SelectedItem="{Binding Group}" DisplayMemberPath="Title"/>
+				<TextBlock Text="{Binding Group.Title}" Name="TbGroup"/>
+			</Grid>
+		</GroupBox>
+		<GroupBox Header="Безопасность" Margin="0,20,0,20">
+			<StackPanel>
+
+				<TextBlock Text="Старый пароль"/>
+				<Grid>
+					<PasswordBox Name="PbOldPassword" PasswordChanged="PbOldPassword_OnPasswordChanged"/>
+					<TextBox Name="TbOldPassword" Visibility="Hidden" TextChanged="TbOldPassword_OnTextChanged"/>
+					<faw:ImageAwesome Icon="Solid_Eye" Width="20" Foreground="DarkGray"
+					                  HorizontalAlignment="Right" Margin="0,0,2,0"
+					                  MouseLeftButtonDown="IconOldPassword_Click"/>
+				</Grid>
+
+				<TextBlock Text="Новый пароль"/>
+				<Grid>
+					<PasswordBox Name="PbNewPassword" PasswordChanged="PbNewPassword_OnPasswordChanged"/>
+					<TextBox Name="TbNewPassword" Visibility="Hidden" TextChanged="TbNewPassword_OnTextChanged"/>
+					<faw:ImageAwesome Icon="Solid_Eye" Width="20" Foreground="DarkGray"
+					                  HorizontalAlignment="Right" Margin="0,0,2,0"
+					                  MouseLeftButtonDown="IconNewPassword_Click"/>
+				</Grid>
+
+				<TextBlock Text="Повторите новый пароль"/>
+				<Grid>
+					<PasswordBox Name="PbConfirmNewPassword" PasswordChanged="PbConfirmNewPassword_OnPasswordChanged"/>
+					<TextBox Name="TbConfirmNewPassword" Visibility="Hidden" TextChanged="TbConfirmNewPassword_OnTextChanged"/>
+					<faw:ImageAwesome Icon="Solid_Eye" Width="20" Foreground="DarkGray"
+					                  HorizontalAlignment="Right" Margin="0,0,2,0"
+					                  MouseLeftButtonDown="IconConfirmNewPassword_Click"/>
+				</Grid>
+
+			</StackPanel>
+		</GroupBox>
+		<Button Content="Сохранить" Click="ButtonBase_OnClick"/>
+	</StackPanel>
+</Page>
