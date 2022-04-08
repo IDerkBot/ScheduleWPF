@@ -21,7 +21,7 @@ jobs:
       uses: NuGet/setup-nuget@v1.0.6
       
     - name: Restore Nuget Packages
-      run: nuget restore ScheduleWPF.ScheduleWPF.sln
+      run: nuget restore ScheduleWPF.sln
       
     - name: Build the Solution
-      run: msbuild ScheduleWPF.ScheduleWPF.sln
+      run: msbuild ScheduleWPF.sln
