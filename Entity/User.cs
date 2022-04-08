@@ -27,7 +27,14 @@ namespace ScheduleWPF.Entity
 			this.Login = login;
 			this.Password = password;
 		}
-
+		public User(string login, string password, byte access)
+		{
+			this.Students = new HashSet<Student>();
+			this.Teachers = new HashSet<Teacher>();
+			this.Login = login;
+			this.Password = password;
+			this.Access = access;
+		}
 		public int ID { get; set; }
 		public string Login { get; set; }
 		public string Password { get; set; }

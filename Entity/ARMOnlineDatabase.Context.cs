@@ -24,7 +24,7 @@ namespace ScheduleWPF.Entity
 			return _ctx;
 		}
 		public ARMEntities()
-				: base("name=ARMEntities")
+						: base("name=ARMEntities")
 		{
 		}
 
@@ -33,6 +33,7 @@ namespace ScheduleWPF.Entity
 			throw new UnintentionalCodeFirstException();
 		}
 
+		public virtual DbSet<Attendance> Attendances { get; set; }
 		public virtual DbSet<Classroom> Classrooms { get; set; }
 		public virtual DbSet<Exam> Exams { get; set; }
 		public virtual DbSet<Group> Groups { get; set; }
@@ -45,8 +46,8 @@ namespace ScheduleWPF.Entity
 		public virtual DbSet<Schedule> Schedules { get; set; }
 		public virtual DbSet<Specialization> Specializations { get; set; }
 		public virtual DbSet<Student> Students { get; set; }
-		public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
 		public virtual DbSet<Teacher> Teachers { get; set; }
+		public virtual DbSet<TypePass> TypePasses { get; set; }
 		public virtual DbSet<User> Users { get; set; }
 	}
 }

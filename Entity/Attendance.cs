@@ -12,12 +12,15 @@ namespace ScheduleWPF.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class sysdiagram
+    public partial class Attendance
     {
-        public string name { get; set; }
-        public int principal_id { get; set; }
-        public int diagram_id { get; set; }
-        public Nullable<int> version { get; set; }
-        public byte[] definition { get; set; }
+        public int ID { get; set; }
+        public int IDStudent { get; set; }
+        public bool IsAbsent { get; set; }
+        public System.DateTime Date { get; set; }
+        public Nullable<int> TypePass { get; set; }
+    
+        public virtual Student Student { get; set; }
+        public virtual TypePass TypePass1 { get; set; }
     }
 }

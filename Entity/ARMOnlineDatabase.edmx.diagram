@@ -4,22 +4,25 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="12ba1cdcb56a44b2a3b35d03f4fe0742" Name="Diagram1">
-        <EntityTypeShape EntityType="ARMModel.Classroom" Width="1.5" PointX="1.5" PointY="30.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ARMModel.Exam" Width="1.5" PointX="3" PointY="9.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="ARMModel.Group" Width="1.5" PointX="1.5" PointY="18.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="ARMModel.Holiday" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ARMModel.Journal" Width="1.5" PointX="3" PointY="6.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ARMModel.Lesson" Width="1.5" PointX="0.75" PointY="9.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ARMModel.LessonSpezialization" Width="1.5" PointX="3" PointY="12.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ARMModel.LessonTeacher" Width="1.5" PointX="6" PointY="9.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="ARMModel.Module" Width="1.5" PointX="6" PointY="6.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ARMModel.Schedule" Width="1.5" PointX="6" PointY="12.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ARMModel.Specialization" Width="1.5" PointX="1.5" PointY="22.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ARMModel.Student" Width="1.5" PointX="0.75" PointY="2.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="ARMModel.sysdiagram" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ARMModel.Teacher" Width="1.5" PointX="1.5" PointY="26.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ARMModel.User" Width="1.5" PointX="1.5" PointY="33.25" IsExpanded="true" />
+      <Diagram DiagramId="25c2b50435854934a86d792c7279992b" Name="Diagram1">
+        <EntityTypeShape EntityType="ARMModel.Attendance" Width="1.5" PointX="6" PointY="19.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ARMModel.Classroom" Width="1.5" PointX="1.5" PointY="18.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ARMModel.Exam" Width="1.5" PointX="3" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ARMModel.Group" Width="1.5" PointX="0.75" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="ARMModel.Holiday" Width="1.5" PointX="3.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ARMModel.Journal" Width="1.5" PointX="6" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="ARMModel.Lesson" Width="1.5" PointX="0.75" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ARMModel.LessonSpezialization" Width="1.5" PointX="3" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ARMModel.LessonTeacher" Width="1.5" PointX="3" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ARMModel.Module" Width="1.5" PointX="6" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ARMModel.Schedule" Width="1.5" PointX="6" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ARMModel.Specialization" Width="1.5" PointX="3.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ARMModel.Student" Width="1.5" PointX="3.75" PointY="17.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ARMModel.Teacher" Width="1.5" PointX="1.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ARMModel.TypePass" Width="1.5" PointX="3.75" PointY="21.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ARMModel.User" Width="1.5" PointX="1.5" PointY="20.875" IsExpanded="true" />
+        <AssociationConnector Association="ARMModel.FK_Attendance_Student" ManuallyRouted="false" />
+        <AssociationConnector Association="ARMModel.FK_Attendance_TypePass" ManuallyRouted="false" />
         <AssociationConnector Association="ARMModel.FK_Schedule_Classroom" ManuallyRouted="false" />
         <AssociationConnector Association="ARMModel.FK_Exam_Group" ManuallyRouted="false" />
         <AssociationConnector Association="ARMModel.FK_Exam_Lesson" ManuallyRouted="false" />
@@ -29,6 +32,7 @@
         <AssociationConnector Association="ARMModel.FK_Student_Group" ManuallyRouted="false" />
         <AssociationConnector Association="ARMModel.FK_Journal_Lesson" ManuallyRouted="false" />
         <AssociationConnector Association="ARMModel.FK_Journal_Student" ManuallyRouted="false" />
+        <AssociationConnector Association="ARMModel.FK_Journal_TypePass" ManuallyRouted="false" />
         <AssociationConnector Association="ARMModel.FK_LessonSpezialization_Lesson" ManuallyRouted="false" />
         <AssociationConnector Association="ARMModel.FK_LessonTeacher_Lesson" ManuallyRouted="false" />
         <AssociationConnector Association="ARMModel.FK_Module_Lesson" ManuallyRouted="false" />

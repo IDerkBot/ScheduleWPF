@@ -20,8 +20,10 @@ namespace ScheduleWPF.Entity
         public byte Couple { get; set; }
         public Nullable<byte> Score { get; set; }
         public bool IsPresent { get; set; }
+        public Nullable<int> TypePass { get; set; }
     
         public virtual Lesson Lesson { get; set; }
         public virtual Student Student { get; set; }
+        public virtual TypePass TypePass1 { get; set; }
     }
 }

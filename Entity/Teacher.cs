@@ -7,8 +7,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Linq;
-
 namespace ScheduleWPF.Entity
 {
 	using System;
@@ -32,11 +30,11 @@ namespace ScheduleWPF.Entity
 		{
 			get => $"{Surname} {Firstname} {Patronymic}";
 		}
+		public string Group { get; set; }
 		public string Phone { get; set; }
 		public string Email { get; set; }
 		public Nullable<int> IDUser { get; set; }
 		public string Address { get; set; }
-		public string Group { get; set; }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		public virtual ICollection<Group> Groups { get; set; }

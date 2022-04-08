@@ -5,6 +5,16 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="Хранилище ARMModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Attendance">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDStudent" Type="int" Nullable="false" />
+          <Property Name="IsAbsent" Type="bit" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="TypePass" Type="int" />
+        </EntityType>
         <EntityType Name="Classroom">
           <Key>
             <PropertyRef Name="ID" />
@@ -52,6 +62,7 @@
           <Property Name="Couple" Type="tinyint" Nullable="false" />
           <Property Name="Score" Type="tinyint" />
           <Property Name="IsPresent" Type="bit" Nullable="false" />
+          <Property Name="TypePass" Type="int" />
         </EntityType>
         <EntityType Name="Lesson">
           <Key>
@@ -104,7 +115,7 @@
           <Property Name="IDGroup" Type="int" Nullable="false" />
           <Property Name="IDLesson" Type="int" Nullable="false" />
           <Property Name="IDClassroom" Type="int" Nullable="false" />
-          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
           <Property Name="Couple" Type="tinyint" Nullable="false" />
         </EntityType>
         <EntityType Name="Specialization">
@@ -128,16 +139,6 @@
           <Property Name="IDUser" Type="int" />
           <Property Name="IDGroup" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
-        </EntityType>
         <EntityType Name="Teacher">
           <Key>
             <PropertyRef Name="Code" />
@@ -159,6 +160,13 @@
           <Property Name="CodeTeacher" Type="int" Nullable="false" />
           <Property Name="IDClassroom" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="TypePass">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="ID" />
@@ -168,6 +176,32 @@
           <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Access" Type="tinyint" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Attendance_Student">
+          <End Role="Student" Type="Self.Student" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Attendance" Type="Self.Attendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Attendance">
+              <PropertyRef Name="IDStudent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Attendance_TypePass">
+          <End Role="TypePass" Type="Self.TypePass" Multiplicity="0..1" />
+          <End Role="Attendance" Type="Self.Attendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypePass">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Attendance">
+              <PropertyRef Name="TypePass" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Exam_Group">
           <End Role="Group" Type="Self.Group" Multiplicity="1" />
           <End Role="Exam" Type="Self.Exam" Multiplicity="*" />
@@ -217,7 +251,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Journal_Lesson">
-          <End Role="Lesson" Type="Self.Lesson" Multiplicity="1" />
+          <End Role="Lesson" Type="Self.Lesson" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Journal" Type="Self.Journal" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Lesson">
@@ -229,7 +265,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Journal_Student">
-          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="Student" Type="Self.Student" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Journal" Type="Self.Journal" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Student">
@@ -237,6 +275,18 @@
             </Principal>
             <Dependent Role="Journal">
               <PropertyRef Name="IDStudent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Journal_TypePass">
+          <End Role="TypePass" Type="Self.TypePass" Multiplicity="0..1" />
+          <End Role="Journal" Type="Self.Journal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypePass">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Journal">
+              <PropertyRef Name="TypePass" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -277,7 +327,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_LessonTeacher_Teacher">
-          <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="LessonTeacher" Type="Self.LessonTeacher" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Teacher">
@@ -349,7 +401,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Student_Group">
-          <End Role="Group" Type="Self.Group" Multiplicity="1" />
+          <End Role="Group" Type="Self.Group" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Student" Type="Self.Student" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Group">
@@ -409,6 +463,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="Хранилище ARMModelContainer">
+          <EntitySet Name="Attendance" EntityType="Self.Attendance" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Classroom" EntityType="Self.Classroom" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Exam" EntityType="Self.Exam" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Group" EntityType="Self.Group" Schema="dbo" store:Type="Tables" />
@@ -421,10 +476,18 @@
           <EntitySet Name="Schedule" EntityType="Self.Schedule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Specialization" EntityType="Self.Specialization" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Teacher" EntityType="Self.Teacher" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TeacherClassroom" EntityType="Self.TeacherClassroom" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TypePass" EntityType="Self.TypePass" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Attendance_Student" Association="Self.FK_Attendance_Student">
+            <End Role="Student" EntitySet="Student" />
+            <End Role="Attendance" EntitySet="Attendance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Attendance_TypePass" Association="Self.FK_Attendance_TypePass">
+            <End Role="TypePass" EntitySet="TypePass" />
+            <End Role="Attendance" EntitySet="Attendance" />
+          </AssociationSet>
           <AssociationSet Name="FK_Exam_Group" Association="Self.FK_Exam_Group">
             <End Role="Group" EntitySet="Group" />
             <End Role="Exam" EntitySet="Exam" />
@@ -447,6 +510,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_Journal_Student" Association="Self.FK_Journal_Student">
             <End Role="Student" EntitySet="Student" />
+            <End Role="Journal" EntitySet="Journal" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Journal_TypePass" Association="Self.FK_Journal_TypePass">
+            <End Role="TypePass" EntitySet="TypePass" />
             <End Role="Journal" EntitySet="Journal" />
           </AssociationSet>
           <AssociationSet Name="FK_LessonSpezialization_Lesson" Association="Self.FK_LessonSpezialization_Lesson">
@@ -511,6 +578,18 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ARMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Attendance">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDStudent" Type="Int32" Nullable="false" />
+          <Property Name="IsAbsent" Type="Boolean" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="TypePass" Type="Int32" />
+          <NavigationProperty Name="Student" Relationship="Self.FK_Attendance_Student" FromRole="Attendance" ToRole="Student" />
+          <NavigationProperty Name="TypePass1" Relationship="Self.FK_Attendance_TypePass" FromRole="Attendance" ToRole="TypePass" />
+        </EntityType>
         <EntityType Name="Classroom">
           <Key>
             <PropertyRef Name="ID" />
@@ -567,8 +646,10 @@
           <Property Name="Couple" Type="Byte" Nullable="false" />
           <Property Name="Score" Type="Byte" />
           <Property Name="IsPresent" Type="Boolean" Nullable="false" />
+          <Property Name="TypePass" Type="Int32" />
           <NavigationProperty Name="Lesson" Relationship="Self.FK_Journal_Lesson" FromRole="Journal" ToRole="Lesson" />
           <NavigationProperty Name="Student" Relationship="Self.FK_Journal_Student" FromRole="Journal" ToRole="Student" />
+          <NavigationProperty Name="TypePass1" Relationship="Self.FK_Journal_TypePass" FromRole="Journal" ToRole="TypePass" />
         </EntityType>
         <EntityType Name="Lesson">
           <Key>
@@ -633,7 +714,7 @@
           <Property Name="IDGroup" Type="Int32" Nullable="false" />
           <Property Name="IDLesson" Type="Int32" Nullable="false" />
           <Property Name="IDClassroom" Type="Int32" Nullable="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Couple" Type="Byte" Nullable="false" />
           <NavigationProperty Name="Classroom" Relationship="Self.FK_Schedule_Classroom" FromRole="Schedule" ToRole="Classroom" />
           <NavigationProperty Name="Group" Relationship="Self.FK_Schedule_Group" FromRole="Schedule" ToRole="Group" />
@@ -662,19 +743,10 @@
           <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IDUser" Type="Int32" />
           <Property Name="IDGroup" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Attendances" Relationship="Self.FK_Attendance_Student" FromRole="Student" ToRole="Attendance" />
           <NavigationProperty Name="Group" Relationship="Self.FK_Student_Group" FromRole="Student" ToRole="Group" />
           <NavigationProperty Name="Journals" Relationship="Self.FK_Journal_Student" FromRole="Student" ToRole="Journal" />
           <NavigationProperty Name="User" Relationship="Self.FK_Student_User" FromRole="Student" ToRole="User" />
-        </EntityType>
-        <EntityType Name="sysdiagram">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="Teacher">
           <Key>
@@ -693,6 +765,15 @@
           <NavigationProperty Name="User" Relationship="Self.FK_Teacher_User" FromRole="Teacher" ToRole="User" />
           <NavigationProperty Name="Classrooms" Relationship="Self.TeacherClassroom" FromRole="Teacher" ToRole="Classroom" />
         </EntityType>
+        <EntityType Name="TypePass">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Attendances" Relationship="Self.FK_Attendance_TypePass" FromRole="TypePass" ToRole="Attendance" />
+          <NavigationProperty Name="Journals" Relationship="Self.FK_Journal_TypePass" FromRole="TypePass" ToRole="Journal" />
+        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="ID" />
@@ -704,6 +785,32 @@
           <NavigationProperty Name="Students" Relationship="Self.FK_Student_User" FromRole="User" ToRole="Student" />
           <NavigationProperty Name="Teachers" Relationship="Self.FK_Teacher_User" FromRole="User" ToRole="Teacher" />
         </EntityType>
+        <Association Name="FK_Attendance_Student">
+          <End Role="Student" Type="Self.Student" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Attendance" Type="Self.Attendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Attendance">
+              <PropertyRef Name="IDStudent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Attendance_TypePass">
+          <End Role="TypePass" Type="Self.TypePass" Multiplicity="0..1" />
+          <End Role="Attendance" Type="Self.Attendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypePass">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Attendance">
+              <PropertyRef Name="TypePass" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Schedule_Classroom">
           <End Role="Classroom" Type="Self.Classroom" Multiplicity="1" />
           <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
@@ -777,7 +884,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Student_Group">
-          <End Role="Group" Type="Self.Group" Multiplicity="1" />
+          <End Role="Group" Type="Self.Group" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Student" Type="Self.Student" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Group">
@@ -789,7 +898,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Journal_Lesson">
-          <End Role="Lesson" Type="Self.Lesson" Multiplicity="1" />
+          <End Role="Lesson" Type="Self.Lesson" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Journal" Type="Self.Journal" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Lesson">
@@ -801,7 +912,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Journal_Student">
-          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="Student" Type="Self.Student" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Journal" Type="Self.Journal" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Student">
@@ -809,6 +922,18 @@
             </Principal>
             <Dependent Role="Journal">
               <PropertyRef Name="IDStudent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Journal_TypePass">
+          <End Role="TypePass" Type="Self.TypePass" Multiplicity="0..1" />
+          <End Role="Journal" Type="Self.Journal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypePass">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Journal">
+              <PropertyRef Name="TypePass" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -873,7 +998,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_LessonTeacher_Teacher">
-          <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="LessonTeacher" Type="Self.LessonTeacher" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Teacher">
@@ -925,6 +1052,7 @@
           <End Role="Teacher" Type="Self.Teacher" Multiplicity="*" />
         </Association>
         <EntityContainer Name="ARMEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Attendances" EntityType="Self.Attendance" />
           <EntitySet Name="Classrooms" EntityType="Self.Classroom" />
           <EntitySet Name="Exams" EntityType="Self.Exam" />
           <EntitySet Name="Groups" EntityType="Self.Group" />
@@ -937,9 +1065,17 @@
           <EntitySet Name="Schedules" EntityType="Self.Schedule" />
           <EntitySet Name="Specializations" EntityType="Self.Specialization" />
           <EntitySet Name="Students" EntityType="Self.Student" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <EntitySet Name="Teachers" EntityType="Self.Teacher" />
+          <EntitySet Name="TypePasses" EntityType="Self.TypePass" />
           <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_Attendance_Student" Association="Self.FK_Attendance_Student">
+            <End Role="Student" EntitySet="Students" />
+            <End Role="Attendance" EntitySet="Attendances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Attendance_TypePass" Association="Self.FK_Attendance_TypePass">
+            <End Role="TypePass" EntitySet="TypePasses" />
+            <End Role="Attendance" EntitySet="Attendances" />
+          </AssociationSet>
           <AssociationSet Name="FK_Schedule_Classroom" Association="Self.FK_Schedule_Classroom">
             <End Role="Classroom" EntitySet="Classrooms" />
             <End Role="Schedule" EntitySet="Schedules" />
@@ -974,6 +1110,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_Journal_Student" Association="Self.FK_Journal_Student">
             <End Role="Student" EntitySet="Students" />
+            <End Role="Journal" EntitySet="Journals" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Journal_TypePass" Association="Self.FK_Journal_TypePass">
+            <End Role="TypePass" EntitySet="TypePasses" />
             <End Role="Journal" EntitySet="Journals" />
           </AssociationSet>
           <AssociationSet Name="FK_LessonSpezialization_Lesson" Association="Self.FK_LessonSpezialization_Lesson">
@@ -1023,6 +1163,17 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="Хранилище ARMModelContainer" CdmEntityContainer="ARMEntities">
+          <EntitySetMapping Name="Attendances">
+            <EntityTypeMapping TypeName="ARMModel.Attendance">
+              <MappingFragment StoreEntitySet="Attendance">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IDStudent" ColumnName="IDStudent" />
+                <ScalarProperty Name="IsAbsent" ColumnName="IsAbsent" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="TypePass" ColumnName="TypePass" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Classrooms">
             <EntityTypeMapping TypeName="ARMModel.Classroom">
               <MappingFragment StoreEntitySet="Classroom">
@@ -1069,6 +1220,7 @@
                 <ScalarProperty Name="Couple" ColumnName="Couple" />
                 <ScalarProperty Name="Score" ColumnName="Score" />
                 <ScalarProperty Name="IsPresent" ColumnName="IsPresent" />
+                <ScalarProperty Name="TypePass" ColumnName="TypePass" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1146,17 +1298,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="ARMModel.sysdiagram">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Teachers">
             <EntityTypeMapping TypeName="ARMModel.Teacher">
               <MappingFragment StoreEntitySet="Teacher">
@@ -1168,6 +1309,14 @@
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="IDUser" ColumnName="IDUser" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TypePasses">
+            <EntityTypeMapping TypeName="ARMModel.TypePass">
+              <MappingFragment StoreEntitySet="TypePass">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
