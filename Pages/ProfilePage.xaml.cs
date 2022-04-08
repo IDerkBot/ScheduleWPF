@@ -1,4 +1,5 @@
-﻿using ScheduleWPF.Classes;
+﻿using System;
+using ScheduleWPF.Classes;
 using ScheduleWPF.Entity;
 using System.Linq;
 using System.Windows;
@@ -7,21 +8,17 @@ using System.Windows.Input;
 
 namespace ScheduleWPF.Pages
 {
-	/// <summary>
-	/// Логика взаимодействия для ProfilePage.xaml
-	/// </summary>
 	public partial class ProfilePage : Page
 	{
 		private Student _currentStudentProfile;
 		private Teacher _currentTeacherProfile;
-
 		#region Init
-
 		public ProfilePage()
 		{
 			InitializeComponent();
 			if (Data.IsStudent)
 			{
+				TbCode.Visibility = Visibility.Collapsed;
 				CbGroup.ItemsSource = ARMEntities.GetContext().Groups.ToList();
 				_currentStudentProfile = ARMEntities.GetContext().Students.Any(x => x.IDUser == Data.IDUser) ? ARMEntities.GetContext().Students.First(x => x.IDUser == Data.IDUser) : new Student();
 				_currentStudentProfile.User = ARMEntities.GetContext().Users.First(x => x.ID == Data.IDUser);
@@ -31,41 +28,29 @@ namespace ScheduleWPF.Pages
 			}
 			else if (Data.IsTeacher)
 			{
+				CbGroup.Visibility = Visibility.Collapsed;
+				TbGroup.Visibility = Visibility.Collapsed;
 				_currentTeacherProfile = ARMEntities.GetContext().Teachers.Any(x => x.IDUser == Data.IDUser) ? ARMEntities.GetContext().Teachers.First(x => x.IDUser == Data.IDUser) : new Teacher();
 				_currentTeacherProfile.User = ARMEntities.GetContext().Users.First(x => x.ID == Data.IDUser);
 				DataContext = _currentTeacherProfile;
 			}
-			else if (Data.IsLessonWork)
-			{
-
-			}
-			else if (Data.IsEducationWork)
-			{
-
-			}
 		}
-
 		#endregion
-
 		#region BtnSave
-
 		private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
 		{
 			if (Data.IsStudent)
 			{
-				if (string.IsNullOrWhiteSpace(_currentStudentProfile.Surname) ||
-				    string.IsNullOrWhiteSpace(_currentStudentProfile.Firstname) ||
-				    string.IsNullOrWhiteSpace(_currentStudentProfile.Patronymic))
+				if (string.IsNullOrWhiteSpace(_currentStudentProfile.Surname) || string.IsNullOrWhiteSpace(_currentStudentProfile.Firstname) ||
+					string.IsNullOrWhiteSpace(_currentStudentProfile.Patronymic))
 				{
-					MessageBox.Show("Заполните обязательные поля!");
-					return;
+					MessageBox.Show("Заполните обязательные поля!"); return;
 				}
-				else if (string.IsNullOrWhiteSpace(TbOldPassword.Text) ||
-				         string.IsNullOrWhiteSpace(TbNewPassword.Text) ||
-				         string.IsNullOrWhiteSpace(TbConfirmNewPassword.Text))
+				if (string.IsNullOrWhiteSpace(TbOldPassword.Text) ||
+					string.IsNullOrWhiteSpace(TbNewPassword.Text) ||
+					string.IsNullOrWhiteSpace(TbConfirmNewPassword.Text))
 				{
-					if (_currentStudentProfile.ID == 0)
-						ARMEntities.GetContext().Students.Add(_currentStudentProfile);
+					if (_currentStudentProfile.ID == 0) ARMEntities.GetContext().Students.Add(_currentStudentProfile);
 				}
 				else
 				{
@@ -73,6 +58,35 @@ namespace ScheduleWPF.Pages
 					{
 						if (TbNewPassword.Text == TbConfirmNewPassword.Text)
 							_currentStudentProfile.User.Password = TbNewPassword.Text;
+						else { MessageBox.Show("Новые пароли не совпадают!"); }
+					}
+					else { MessageBox.Show("Старый пароль введен не верно!"); return; }
+				}
+				ARMEntities.GetContext().SaveChanges();
+				MessageBox.Show("Данные сохранены!"); Manager.GoBack();
+			}
+			else if (Data.IsTeacher)
+			{
+				if (string.IsNullOrWhiteSpace(_currentTeacherProfile.Surname) ||
+					string.IsNullOrWhiteSpace(_currentTeacherProfile.Firstname) ||
+					string.IsNullOrWhiteSpace(_currentTeacherProfile.Patronymic))
+				{
+					MessageBox.Show("Заполните обязательные поля!");
+					return;
+				}
+				if (string.IsNullOrWhiteSpace(TbOldPassword.Text) ||
+				string.IsNullOrWhiteSpace(TbNewPassword.Text) ||
+				string.IsNullOrWhiteSpace(TbConfirmNewPassword.Text))
+				{
+					if (!ARMEntities.GetContext().Teachers.Any(x => x.Code == _currentTeacherProfile.Code))
+						ARMEntities.GetContext().Teachers.Add(_currentTeacherProfile);
+				}
+				else
+				{
+					if (_currentTeacherProfile.User.Password == TbOldPassword.Text)
+					{
+						if (TbNewPassword.Text == TbConfirmNewPassword.Text)
+							_currentTeacherProfile.User.Password = TbNewPassword.Text;
 						else
 						{
 							MessageBox.Show("Новые пароли не совпадают!");
@@ -88,22 +102,13 @@ namespace ScheduleWPF.Pages
 				MessageBox.Show("Данные сохранены!");
 				Manager.GoBack();
 			}
-			else if (Data.IsTeacher)
-			{
-
-			}
 		}
-
 		#endregion
-
 		private bool _oldPasswordVisibility = true;
 		private bool _newPasswordVisibility = true;
 		private bool _confirmNewPasswordVisibility = true;
-
 		#region TogglePassword
-
 		#region ToggleVisibility
-
 		private void IconOldPassword_Click(object sender, MouseButtonEventArgs e)
 		{
 			if (_oldPasswordVisibility)
@@ -149,11 +154,8 @@ namespace ScheduleWPF.Pages
 				PbConfirmNewPassword.Visibility = Visibility.Visible;
 			}
 		}
-
 		#endregion
-
 		#region ToggleText
-
 		private void PbOldPassword_OnPasswordChanged(object sender, RoutedEventArgs e)
 		{
 			if (_oldPasswordVisibility) TbOldPassword.Text = PbOldPassword.Password;
@@ -162,7 +164,6 @@ namespace ScheduleWPF.Pages
 		{
 			if (_oldPasswordVisibility == false) PbOldPassword.Password = TbOldPassword.Text;
 		}
-
 		private void PbNewPassword_OnPasswordChanged(object sender, RoutedEventArgs e)
 		{
 			if (_newPasswordVisibility) TbNewPassword.Text = PbNewPassword.Password;
@@ -180,47 +181,54 @@ namespace ScheduleWPF.Pages
 		{
 			if (_confirmNewPasswordVisibility == false) PbConfirmNewPassword.Password = TbConfirmNewPassword.Text;
 		}
-
 		#endregion
-
 		#endregion
-
 		private void TbPersonalInfo_OnTextChanged(object sender, TextChangedEventArgs e)
 		{
 			GetPersonalInfo();
 		}
-
 		private void GetPersonalInfo()
 		{
-			if (string.IsNullOrWhiteSpace(TbSurname.Text) ||
-					string.IsNullOrWhiteSpace(TbFirstname.Text) ||
-					string.IsNullOrWhiteSpace(TbPatronymic.Text))
-				return;
-			else
+			try
 			{
+				if (string.IsNullOrWhiteSpace(TbSurname.Text) || string.IsNullOrWhiteSpace(TbFirstname.Text) || string.IsNullOrWhiteSpace(TbPatronymic.Text)) return;
 				if (Data.IsStudent)
 				{
-					if (ARMEntities.GetContext().Students.Any(x =>
-						    x.Surname.Contains(TbSurname.Text) && x.Firstname.Contains(TbFirstname.Text)))
-					{
-						_currentStudentProfile = ARMEntities.GetContext().Students.First(x =>
-							x.Surname.Contains(TbSurname.Text) && x.Firstname.Contains(TbFirstname.Text));
-						_currentStudentProfile.User = ARMEntities.GetContext().Users.First(x => x.ID == Data.IDUser);
-						CbGroup.Visibility = Visibility.Hidden;
-						TbGroup.Visibility = Visibility.Visible;
-						TbGroup.Text = _currentStudentProfile.Group.Title;
-					}
+					if (!ARMEntities.GetContext().Students.Any(x => x.Surname.Contains(TbSurname.Text) && x.Firstname.Contains(TbFirstname.Text))) return;
+					_currentStudentProfile = ARMEntities.GetContext().Students.First(x =>
+					x.Surname.Contains(TbSurname.Text) && x.Firstname.Contains(TbFirstname.Text));
+					_currentStudentProfile.User = ARMEntities.GetContext().Users.First(x => x.ID == Data.IDUser);
+					CbGroup.Visibility = Visibility.Hidden;
+					TbGroup.Visibility = Visibility.Visible;
+					TbGroup.Text = _currentStudentProfile.Group.Title;
 				}
 				else if (Data.IsTeacher)
 				{
-					if (ARMEntities.GetContext().Teachers.Any(x =>
-						    x.Surname.Contains(TbSurname.Text) && x.Firstname.Contains(TbFirstname.Text)))
-					{
-						_currentTeacherProfile = ARMEntities.GetContext().Teachers.First(x =>
-							x.Surname.Contains(TbSurname.Text) && x.Firstname.Contains(TbFirstname.Text));
-						_currentTeacherProfile.User = ARMEntities.GetContext().Users.First(x => x.ID == Data.IDUser);
-					}
+					if (!int.TryParse(TbCode.Text, out var code)) return;
+					if (!ARMEntities.GetContext().Teachers.Any(x => x.Code == code)) return;
+					_currentTeacherProfile = ARMEntities.GetContext().Teachers.First(x => x.Code == code);
+					_currentTeacherProfile.User = ARMEntities.GetContext().Users.First(x => x.ID == Data.IDUser);
 				}
+			}
+			catch (Exception e)
+			{
+				MessageBox.Show($"Ошибка: {e.Message} \nВнутреннее исключение:\n{e.InnerException}");
+			}
+		}
+		private void TbCode_OnTextChanged(object sender, TextChangedEventArgs e)
+		{
+			try
+			{
+				if (!int.TryParse(TbCode.Text, out var code)) return;
+				if (!ARMEntities.GetContext().Teachers.Any(x => x.Code == code)) return;
+				var teacher = ARMEntities.GetContext().Teachers.First(x => x.Code == code);
+				TbSurname.Text = teacher.Surname;
+				TbFirstname.Text = teacher.Firstname;
+				TbPatronymic.Text = teacher.Patronymic;
+			}
+			catch (Exception xe)
+			{
+				MessageBox.Show($"Ошибка: {xe.Message} \nВнутреннее исключение:\n{xe.InnerException}");
 			}
 		}
 	}

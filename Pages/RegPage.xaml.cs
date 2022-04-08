@@ -1,4 +1,5 @@
-﻿using ScheduleWPF.Classes;
+﻿using System.Collections.Generic;
+using ScheduleWPF.Classes;
 using ScheduleWPF.Entity;
 using System.Linq;
 using System.Windows;
@@ -19,13 +20,18 @@ namespace ScheduleWPF.Pages
 			var password = PbPassword.Password;
 			if (!ARMEntities.GetContext().Users.Any(x => x.Login == login))
 			{
-				ARMEntities.GetContext().Users.Add(new User(login, password));
+				ARMEntities.GetContext().Users.Add(new User(login, password, (byte)(CbRole.SelectedItem.ToString() == "Студент" ? 0 : 1)));
 				ARMEntities.GetContext().SaveChanges();
 				MessageBox.Show("Вы успешно зарегистрировались!");
 				Manager.GoBack();
 			}
 			else
 				MessageBox.Show("Такой пользователь уже существует!");
+		}
+
+		private void RegPage_OnLoaded(object sender, RoutedEventArgs e)
+		{
+			CbRole.ItemsSource = new List<string> { "Студент", "Преподаватель" };
 		}
 	}
 }

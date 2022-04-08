@@ -1,6 +1,8 @@
-﻿using ScheduleWPF.Classes;
+﻿using System.Linq;
+using ScheduleWPF.Classes;
 using System.Windows;
 using System.Windows.Controls;
+using ScheduleWPF.Entity;
 
 namespace ScheduleWPF.Pages
 {
@@ -25,18 +27,78 @@ namespace ScheduleWPF.Pages
 		private void BtnHolidaysMove_Click(object sender, RoutedEventArgs e) => Manager.Navigate(new HolidaysPage());
 		private void Menu_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			BtnProfile.Visibility = Data.IsAdmin ? Visibility.Collapsed : Visibility.Visible;
-			BtnLessons.Visibility = Data.IsStudent ? Visibility.Collapsed : Visibility.Visible;
-			BtnJournal.Visibility = Data.IsAdmin ? Visibility.Collapsed : Visibility.Visible;
-			BtnAttendance.Visibility = Data.IsAdmin ? Visibility.Collapsed : Visibility.Visible;
-			BtnGroups.Visibility = Data.IsStudent ? Visibility.Collapsed : Visibility.Visible;
-			BtnExams.Visibility = Data.IsStudent ? Visibility.Collapsed : Visibility.Visible;
-			BtnClassrooms.Visibility = Data.IsAdmin ? Visibility.Collapsed : Visibility.Visible;
-			BtnSchedule.Visibility = Data.IsAdmin ? Visibility.Collapsed : Visibility.Visible;
-			BtnStudents.Visibility = Data.IsStudent ? Visibility.Collapsed : Visibility.Visible;
-			BtnSpecializations.Visibility = Data.IsStudent ? Visibility.Collapsed : Visibility.Visible;
-			BtnModules.Visibility = Data.IsStudent ? Visibility.Collapsed : Visibility.Visible;
-			BtnHolidays.Visibility = Data.IsStudent ? Visibility.Collapsed : Visibility.Visible;
+			switch (Data.IsAdmin)
+			{
+				case true:
+					BtnProfile.Visibility = Data.IsAdmin ? Visibility.Collapsed : Visibility.Visible;
+					BtnJournal.Visibility = Data.IsAdmin ? Visibility.Collapsed : Visibility.Visible;
+					BtnAttendance.Visibility = Data.IsAdmin ? Visibility.Collapsed : Visibility.Visible;
+					break;
+			}
+			switch (Data.IsStudent)
+			{
+				//BtnHolidays.Visibility = Data.IsStudent ? Visibility.Collapsed : Visibility.Visible;
+				case true when !ARMEntities.GetContext().Students.Any(x => x.IDUser == Data.IDUser):
+					MessageBox.Show("Добавьте данные в профиль!");
+					BtnLessons.Visibility = Visibility.Collapsed;
+					BtnTeachers.Visibility = Visibility.Collapsed;
+					BtnJournal.Visibility = Visibility.Collapsed;
+					BtnAttendance.Visibility = Visibility.Collapsed;
+					BtnGroups.Visibility = Visibility.Collapsed;
+					BtnExams.Visibility = Visibility.Collapsed;
+					BtnClassrooms.Visibility = Visibility.Collapsed;
+					BtnSchedule.Visibility = Visibility.Collapsed;
+					BtnStudents.Visibility = Visibility.Collapsed;
+					BtnSpecializations.Visibility = Visibility.Collapsed;
+					BtnModules.Visibility = Visibility.Collapsed;
+					BtnHolidays.Visibility = Visibility.Collapsed;
+					break;
+				case true when ARMEntities.GetContext().Students.Any(x => x.IDUser == Data.IDUser):
+					BtnLessons.Visibility = Visibility.Visible;
+					BtnTeachers.Visibility = Visibility.Visible;
+					BtnJournal.Visibility = Visibility.Visible;
+					BtnAttendance.Visibility = Visibility.Visible;
+					BtnGroups.Visibility = Visibility.Visible;
+					BtnExams.Visibility = Visibility.Collapsed;
+					BtnClassrooms.Visibility = Visibility.Visible;
+					BtnSchedule.Visibility = Visibility.Visible;
+					BtnStudents.Visibility = Visibility.Collapsed;
+					BtnSpecializations.Visibility = Visibility.Collapsed;
+					BtnModules.Visibility = Visibility.Collapsed;
+					BtnHolidays.Visibility = Visibility.Collapsed;
+					break;
+			}
+			switch (Data.IsTeacher)
+			{
+				case true when !ARMEntities.GetContext().Teachers.Any(x => x.IDUser == Data.IDUser):
+					BtnLessons.Visibility = Visibility.Collapsed;
+					BtnTeachers.Visibility = Visibility.Collapsed;
+					BtnJournal.Visibility = Visibility.Collapsed;
+					BtnAttendance.Visibility = Visibility.Collapsed;
+					BtnGroups.Visibility = Visibility.Collapsed;
+					BtnExams.Visibility = Visibility.Collapsed;
+					BtnClassrooms.Visibility = Visibility.Collapsed;
+					BtnSchedule.Visibility = Visibility.Collapsed;
+					BtnStudents.Visibility = Visibility.Collapsed;
+					BtnSpecializations.Visibility = Visibility.Collapsed;
+					BtnModules.Visibility = Visibility.Collapsed;
+					BtnHolidays.Visibility = Visibility.Collapsed;
+					break;
+				case true when ARMEntities.GetContext().Teachers.Any(x => x.IDUser == Data.IDUser):
+					BtnLessons.Visibility = Visibility.Visible;
+					BtnTeachers.Visibility = Visibility.Visible;
+					BtnJournal.Visibility = Visibility.Visible;
+					BtnAttendance.Visibility = Visibility.Visible;
+					BtnGroups.Visibility = Visibility.Visible;
+					BtnExams.Visibility = Visibility.Collapsed;
+					BtnClassrooms.Visibility = Visibility.Visible;
+					BtnSchedule.Visibility = Visibility.Visible;
+					BtnHolidays.Visibility = Visibility.Visible;
+					BtnSpecializations.Visibility = Visibility.Visible;
+					BtnModules.Visibility = Visibility.Collapsed;
+					BtnHolidays.Visibility = Visibility.Visible;
+					break;
+			}
 		}
 	}
 }

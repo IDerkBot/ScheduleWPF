@@ -1,6 +1,4 @@
 ﻿using ScheduleWPF.Classes;
-using ScheduleWPF.Entity;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -11,11 +9,7 @@ namespace ScheduleWPF.Pages
 	/// </summary>
 	public partial class AuthPage : Page
 	{
-		public AuthPage()
-		{
-			InitializeComponent();
-		}
-
+		public AuthPage() => InitializeComponent();
 		private void BtnAuth_Click(object sender, RoutedEventArgs e)
 		{
 			if(string.IsNullOrWhiteSpace(TbLogin.Text) || string.IsNullOrWhiteSpace(PbPassword.Password)) return;
@@ -24,20 +18,38 @@ namespace ScheduleWPF.Pages
 				if (Authorization.CheckPassword(TbLogin.Text, PbPassword.Password))
 				{
 					var user = Authorization.GetUser(TbLogin.Text);
+					if (CbRemember.IsChecked == true)
+					{
+						var config = FileManager.GetConfig();
+						config.Login = TbLogin.Text;
+						config.Password = PbPassword.Password;
+						config.IsRemember = true;
+						FileManager.SetConfig(config);
+					}
+					else
+					{
+						var config = FileManager.GetConfig();
+						config.Login = "";
+						config.Password = "";
+						config.IsRemember = false;
+					}
 					Data.IDUser = user.ID;
 					Data.Access = user.Access;
 					Manager.Navigate(new Menu());
 				}
-				else
-					MessageBox.Show("Пароль не верный!");
+				else MessageBox.Show("Пароль не верный!");
 			}
-			else
-				MessageBox.Show("Пользователь не найден!");
 		}
 
-		private void BtnRegMove_Click(object sender, RoutedEventArgs e)
+		private void BtnRegMove_Click(object sender, RoutedEventArgs e) => Manager.Navigate(new RegPage());
+
+		private void AuthPage_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			Manager.Navigate(new RegPage());
+			var config = FileManager.GetConfig();
+			if (!config.IsRemember) return;
+			TbLogin.Text = config.Login;
+			PbPassword.Password = config.Password;
+			CbRemember.IsChecked = config.IsRemember;
 		}
 	}
 }
