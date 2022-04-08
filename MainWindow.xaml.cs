@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ScheduleWPF.Classes;
+using ScheduleWPF.Pages;
+using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using MaterialDesignThemes.Wpf;
 
 namespace ScheduleWPF
 {
@@ -23,6 +15,25 @@ namespace ScheduleWPF
 		public MainWindow()
 		{
 			InitializeComponent();
+			Manager.MainFrame = MainFrame;
+			Manager.Navigate(new AuthPage());
+			MyCommand.InputGestures.Add(new KeyGesture(Key.Down, ModifierKeys.Alt));
+		}
+
+		private void MainFrame_ContentRendered(object sender, EventArgs e)
+		{
+			IconBack.Kind = Manager.MainFrame.Content.ToString().Contains("Menu") ? PackIconKind.ExitToApp : PackIconKind.ArrowLeft;
+			BtnBack.Visibility = Manager.MainFrame.CanGoBack ? Visibility.Visible : Visibility.Collapsed;
+		}
+		private void ButtonBase_OnClick(object sender, RoutedEventArgs e) => Manager.GoBack();
+		public static RoutedCommand MyCommand = new RoutedCommand();
+
+		private void MyCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+		{
+			if (!Manager.MainFrame.Content.ToString().Contains("RegPage")) return;
+			MessageBox.Show("Вы вошли как админ!");
+			Data.Access = 4;
+			Manager.Navigate(new Menu());
 		}
 	}
 }
