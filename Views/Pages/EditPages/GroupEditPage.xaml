@@ -1,0 +1,38 @@
+﻿<Page
+    x:Class="ScheduleWPF.Views.Pages.EditPages.GroupEditPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    Title="GroupEditPage"
+    HorizontalAlignment="Center"
+    VerticalAlignment="Center"
+    d:DesignHeight="155"
+    d:DesignWidth="300"
+    Loaded="GroupEditPage_OnLoaded"
+    mc:Ignorable="d">
+
+    <StackPanel Width="300">
+        <TextBox
+            md:HintAssist.Hint="Название"
+            md:HintAssist.IsFloating="True"
+            Text="{Binding Title}" />
+        <ComboBox
+            Name="CbSpecialization"
+            md:HintAssist.Hint="Специализация"
+            md:HintAssist.IsFloating="True"
+            DisplayMemberPath="Title"
+            SelectedItem="{Binding Specialization}" />
+        <ComboBox
+            Name="CbTeacher"
+            md:HintAssist.Hint="Классный руководитель"
+            md:HintAssist.IsFloating="True"
+            DisplayMemberPath="Fullname"
+            SelectedItem="{Binding Teacher}" />
+        <Button
+            Margin="0,5"
+            Click="ButtonBase_OnClick"
+            Content="Сохранить" />
+    </StackPanel>
+</Page>

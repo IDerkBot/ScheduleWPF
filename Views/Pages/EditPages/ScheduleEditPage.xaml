@@ -1,0 +1,37 @@
+﻿<Page
+    x:Class="ScheduleWPF.Views.Pages.EditPages.ScheduleEditPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ScheduleWPF.Views.Pages.EditPages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="ScheduleEditPage"
+    VerticalAlignment="Center"
+    d:DesignHeight="450"
+    d:DesignWidth="300"
+    mc:Ignorable="d">
+
+    <StackPanel Margin="10">
+        <ComboBox
+            Name="CbGroups"
+            DisplayMemberPath="Title"
+            SelectedItem="{Binding Group}" />
+        <ComboBox
+            Name="CbFirstLesson"
+            DisplayMemberPath="Title"
+            SelectedItem="{Binding FirstLesson}" />
+        <ComboBox
+            Name="CbSecondLesson"
+            DisplayMemberPath="Title"
+            SelectedItem="{Binding SecondLesson}" />
+        <ComboBox
+            Name="CbThirdLesson"
+            DisplayMemberPath="Title"
+            SelectedItem="{Binding ThirdLesson}" />
+        <ComboBox
+            Name="CbFourthLesson"
+            DisplayMemberPath="Title"
+            SelectedItem="{Binding FourthLesson}" />
+        <Button Click="ButtonBase_OnClick" Content="Сохранить" />
+    </StackPanel>
+</Page>
